@@ -1,4 +1,5 @@
 package com.company.miadot.adapters;
+
 import com.google.firebase.auth.FirebaseAuth;
 import android.content.Context;
 import android.text.TextUtils;
@@ -21,7 +22,6 @@ import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Transaction;
 import androidx.annotation.Nullable;
 
-
 import com.bumptech.glide.Glide;
 import com.company.miadot.R;
 import com.company.miadot.model.Animal;
@@ -33,6 +33,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.List;
+import java.util.Objects;
 
 public class AnimalAdapter extends RecyclerView.Adapter<AnimalAdapter.AnimalViewHolder> {
 
@@ -59,14 +60,46 @@ public class AnimalAdapter extends RecyclerView.Adapter<AnimalAdapter.AnimalView
         holder.textLikes.setText(String.valueOf(animal.getLikes()));
         holder.textInteressados.setText(String.valueOf(animal.getInteressados()));
 
+        // Limpa qualquer carregamento anterior da imagem (importante para RecyclerView)
+        Glide.with(context).clear(holder.imageAnimal);
+
+        // Carrega a imagem com Glide
         Glide.with(context)
                 .load(animal.getImageURL())
                 .placeholder(R.drawable.placeholder_image)
                 .into(holder.imageAnimal);
 
-        // Botão curtir
+        String uid = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
+
+        // Setar estado padrão do botão de curtir (não curtido)
+        holder.buttonLike.setImageResource(R.drawable.unlike);
+        holder.buttonLike.setEnabled(true);
+
+        // Consultar Firebase para saber se o usuário já curtiu esse animal
+        DatabaseReference likeRef = FirebaseDatabase.getInstance()
+                .getReference("animais")
+                .child(animal.getId())
+                .child("curtidas")
+                .child(uid);
+
+        likeRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    holder.buttonLike.setImageResource(R.drawable.like_icon);
+                } else {
+                    holder.buttonLike.setImageResource(R.drawable.unlike);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.e("Firebase", "Erro ao verificar curtida", error.toException());
+            }
+        });
+
+        // Clique no botão curtir
         holder.buttonLike.setOnClickListener(v -> {
-            String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
             DatabaseReference animalRef = FirebaseDatabase.getInstance()
                     .getReference("animais")
                     .child(animal.getId());
@@ -102,6 +135,7 @@ public class AnimalAdapter extends RecyclerView.Adapter<AnimalAdapter.AnimalView
                     if (committed && currentData != null) {
                         Animal updatedAnimal = currentData.getValue(Animal.class);
                         if (updatedAnimal != null) {
+                            // Atualiza texto e estado do botão
                             holder.textLikes.setText(String.valueOf(updatedAnimal.getLikes()));
                             animal.setLikes(updatedAnimal.getLikes());
                             boolean jaCurtiu = updatedAnimal.getCurtidas() != null &&
@@ -118,75 +152,58 @@ public class AnimalAdapter extends RecyclerView.Adapter<AnimalAdapter.AnimalView
             });
         });
 
+        // Carrega os comentários
+        loadComentarios(animal.getId(), holder);
 
-        // Botão para mostrar/ocultar comentários e área para escrever
+        // Botão para mostrar/esconder campo de comentário
         holder.buttonComment.setOnClickListener(v -> {
             if (holder.layoutComentarios.getVisibility() == View.GONE) {
                 holder.layoutComentarios.setVisibility(View.VISIBLE);
-                holder.editComentario.setVisibility(View.VISIBLE);
-                holder.buttonEnviarComentario.setVisibility(View.VISIBLE);
-                loadComentarios(animal.getId(), holder);
             } else {
                 holder.layoutComentarios.setVisibility(View.GONE);
-                holder.editComentario.setVisibility(View.GONE);
-                holder.buttonEnviarComentario.setVisibility(View.GONE);
             }
         });
-
-        String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        DatabaseReference likeRef = FirebaseDatabase.getInstance()
-                .getReference("animais")
-                .child(animal.getId())
-                .child("curtidas")
-                .child(uid);
-
-        likeRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists()) {
-                    // Já curtiu: mudar cor do botão para vermelho
-                    holder.buttonLike.setImageResource(R.drawable.like_icon);
-                    //holder.buttonLike.setEnabled(false); // opcional: impedir clicar de novo
-                } else {
-                    holder.buttonLike.setImageResource(R.drawable.unlike); // normal
-                    holder.buttonLike.setEnabled(true);
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Log.e("Firebase", "Erro ao verificar curtida", error.toException());
-            }
-        });
-
 
         // Enviar comentário
         holder.buttonEnviarComentario.setOnClickListener(v -> {
-            String textoComentario = holder.editComentario.getText().toString().trim();
-            if (TextUtils.isEmpty(textoComentario)) {
+            String texto = holder.editComentario.getText().toString().trim();
+            if (TextUtils.isEmpty(texto)) {
                 Toast.makeText(context, "Digite um comentário", Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            // Criar objeto Comentarios
-            Comentarios novoComentario = new Comentarios("Usuário Exemplo", textoComentario, System.currentTimeMillis());
-
-            // Referência no Firebase para o nó comentarios daquele animal
-            DatabaseReference refComentarios = FirebaseDatabase.getInstance()
+            String comentarioId = FirebaseDatabase.getInstance()
                     .getReference("animais")
                     .child(animal.getId())
-                    .child("comentarios");
+                    .child("comentarios")
+                    .push()
+                    .getKey();
 
-            // Criar novo nó push para o comentário
-            refComentarios.push().setValue(novoComentario).addOnCompleteListener(task -> {
-                if (task.isSuccessful()) {
-                    Toast.makeText(context, "Comentário enviado!", Toast.LENGTH_SHORT).show();
-                    holder.editComentario.setText("");
-                    loadComentarios(animal.getId(), holder); // atualizar lista de comentários
-                } else {
-                    Toast.makeText(context, "Falha ao enviar comentário", Toast.LENGTH_SHORT).show();
-                }
-            });
+            if (comentarioId == null) {
+                Toast.makeText(context, "Erro ao gerar ID do comentário", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            Comentarios novoComentario = new Comentarios();
+            novoComentario.setId(comentarioId);
+            novoComentario.setNome(FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
+            novoComentario.setTexto(texto);
+            novoComentario.setTimestamp(System.currentTimeMillis());
+
+            FirebaseDatabase.getInstance()
+                    .getReference("animais")
+                    .child(animal.getId())
+                    .child("comentarios")
+                    .child(comentarioId)
+                    .setValue(novoComentario)
+                    .addOnSuccessListener(aVoid -> {
+                        Toast.makeText(context, "Comentário enviado!", Toast.LENGTH_SHORT).show();
+                        holder.editComentario.setText("");
+                        loadComentarios(animal.getId(), holder); // Atualiza a lista de comentários
+                    })
+                    .addOnFailureListener(e -> {
+                        Toast.makeText(context, "Erro ao enviar comentário", Toast.LENGTH_SHORT).show();
+                    });
         });
     }
 
@@ -229,7 +246,7 @@ public class AnimalAdapter extends RecyclerView.Adapter<AnimalAdapter.AnimalView
         return animalList.size();
     }
 
-    static class AnimalViewHolder extends RecyclerView.ViewHolder {
+    class AnimalViewHolder extends RecyclerView.ViewHolder {
         ImageView imageAnimal;
         TextView textNome, textLikes, textInteressados, textComentarios;
         ImageButton buttonLike, buttonComment;

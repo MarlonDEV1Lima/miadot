@@ -1,0 +1,32 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+    <LinearLayout android:orientation="vertical" android:padding="16dp"
+        android:layout_width="match_parent" android:layout_height="wrap_content">
+
+        <ImageView android:id="@+id/imageAnimal"
+            android:layout_width="match_parent" android:layout_height="200dp"
+            android:scaleType="centerCrop" android:background="#CCC"
+            android:contentDescription="Imagem do animal" />
+
+        <Button android:id="@+id/btnSelecionarImagem"
+            android:text="Selecionar Foto"
+            android:layout_width="match_parent" android:layout_height="wrap_content" />
+
+        <EditText android:id="@+id/etNome" android:hint="Nome do animal"
+            android:layout_width="match_parent" android:layout_height="wrap_content" />
+
+        <EditText android:id="@+id/etIdade" android:hint="Idade"
+            android:layout_width="match_parent" android:layout_height="wrap_content" />
+
+        <EditText android:id="@+id/etEstado" android:hint="Estado"
+            android:layout_width="match_parent" android:layout_height="wrap_content" />
+
+        <EditText android:id="@+id/etDescricao" android:hint="Descrição"
+            android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:minLines="3" android:gravity="top" />
+
+        <Button android:id="@+id/btnCadastrar" android:text="Cadastrar"
+            android:layout_width="match_parent" android:layout_height="wrap_content" />
+    </LinearLayout>
+</ScrollView>

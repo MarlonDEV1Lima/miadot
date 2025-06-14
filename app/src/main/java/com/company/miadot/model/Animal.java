@@ -6,6 +6,10 @@ import java.util.Map;
 public class Animal {
     private String id;
     private String nome;
+    private String idade;
+    private String estado;
+    private String descricao;
+    private String donoId;
     private String imageURL;
     private Integer likes;
     private int interessados;
@@ -47,5 +51,37 @@ public class Animal {
 
     public void setCurtidas(Map<String, Boolean> curtidas) {
         this.curtidas = curtidas;
+    }
+
+    public String getIdade() {
+        return idade;
+    }
+
+    public void setIdade(String idade) {
+        this.idade = idade;
+    }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+
+    public String getDescricao() {
+        return descricao;
+    }
+
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
+    }
+
+    public String getDonoId() {
+        return donoId;
+    }
+
+    public void setDonoId(String donoId) {
+        this.donoId = donoId;
     }
 }
