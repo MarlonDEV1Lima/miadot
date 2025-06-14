@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">miadot</string>
+    <string name="entrar">Entrar</string>
+    <string name="senha">Senha</string>
+    <string name="e_mail">E-mail</string>
+</resources>

@@ -1,0 +1,92 @@
+package com.company.miadot.activities;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.company.miadot.R;
+import com.company.miadot.adapters.AnimalAdapter;
+import com.company.miadot.model.Animal;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.ListenerRegistration;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class FeedActivity extends AppCompatActivity {
+
+    private RecyclerView recyclerView;
+    private AnimalAdapter adapter;
+    private List<Animal> animalList = new ArrayList<>();
+    private FirebaseFirestore db;
+    private ListenerRegistration listener;
+
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_feed);
+
+        // RecyclerView
+        recyclerView = findViewById(R.id.recyclerViewAnimais);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        adapter = new AnimalAdapter(this, animalList);
+        recyclerView.setAdapter(adapter);
+
+        // Bottom menu
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
+
+        bottomNavigationView.setOnItemSelectedListener(item -> {
+            int itemId = item.getItemId();
+
+            if (itemId == R.id.nav_feed) {
+                return true;
+            } else if (itemId == R.id.profileImage) {
+                startActivity(new Intent(this, PerfilActivity.class));
+                return true;
+            } else if (itemId == R.id.nav_settings) {
+                startActivity(new Intent(this, ConfiguracoesActivity.class));
+                return true;
+            }
+
+            return false;
+        });
+
+        db = FirebaseFirestore.getInstance();
+        carregarAnimais();
+    }
+
+    private void carregarAnimais() {
+        listener = db.collection("animais")
+                .addSnapshotListener((snapshots, e) -> {
+                    if (e != null) {
+                        Log.e("FeedActivity", "Erro ao buscar animais", e);
+                        return;
+                    }
+
+                    animalList.clear();
+                    for (DocumentSnapshot doc : snapshots) {
+                        Animal animal = doc.toObject(Animal.class);
+                        if (animal != null) {
+                            animalList.add(animal);
+                        }
+                    }
+                    adapter.notifyDataSetChanged();
+                });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (listener != null) {
+            listener.remove();
+        }
+    }
+}
