@@ -13,9 +13,11 @@
 **/google-services.json
 **/firebase-config.json
 
- #Arquivos do Cloudinary
- **/CloudinaryConfig.java
- **/MyApplication.java
+# Ignorar MyApplication.java
+/app/src/main/java/com/company/miadot/MyApplication.java
+
+# Ignorar CloudinaryConfig.java dentro da pasta utils
+/app/src/main/java/com/company/miadot/utils/CloudinaryConfig.java
 
 # Arquivos de cache e logs
 *.log
