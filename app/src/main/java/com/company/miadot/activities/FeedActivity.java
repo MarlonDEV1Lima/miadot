@@ -56,12 +56,25 @@ public class FeedActivity extends AppCompatActivity {
             int itemId = item.getItemId();
 
             if (itemId == R.id.nav_feed) {
+                // Já está no feed
                 return true;
-            } else if (itemId == R.id.profileImage) {
+
+            } else if (itemId == R.id.nav_add) {
+                startActivity(new Intent(this, CadastrarAnimalActivity.class));
+                return true;
+
+            } else if (itemId == R.id.nav_profile) {
                 startActivity(new Intent(this, PerfilActivity.class));
                 return true;
+
             } else if (itemId == R.id.nav_settings) {
                 startActivity(new Intent(this, ConfiguracoesActivity.class));
+                return true;
+
+            } else if (itemId == R.id.nav_logout) {
+                FirebaseAuth.getInstance().signOut();
+                startActivity(new Intent(this, LoginActivity.class));
+                finish();
                 return true;
             }
 

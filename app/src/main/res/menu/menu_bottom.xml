@@ -1,5 +1,10 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
+        android:id="@+id/nav_profile"
+        android:icon="@drawable/default_profile"
+    android:title="Perfil" />
+
+    <item
         android:id="@+id/nav_feed"
         android:icon="@drawable/ic_home"
         android:title="Início" />
@@ -7,6 +12,7 @@
         android:id="@+id/nav_add"
         android:icon="@drawable/outline_add"
         android:title="Novo" />
+
     
     <item
         android:id="@+id/nav_settings"

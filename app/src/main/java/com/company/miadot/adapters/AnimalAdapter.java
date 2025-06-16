@@ -58,7 +58,7 @@ public class AnimalAdapter extends RecyclerView.Adapter<AnimalAdapter.AnimalView
 
         holder.textNome.setText(animal.getNome());
         holder.textLikes.setText(String.valueOf(animal.getLikes()));
-        holder.textInteressados.setText(String.valueOf(animal.getInteressados()));
+
 
         // Limpa qualquer carregamento anterior da imagem (importante para RecyclerView)
         Glide.with(context).clear(holder.imageAnimal);
@@ -248,24 +248,25 @@ public class AnimalAdapter extends RecyclerView.Adapter<AnimalAdapter.AnimalView
 
     class AnimalViewHolder extends RecyclerView.ViewHolder {
         ImageView imageAnimal;
-        TextView textNome, textLikes, textInteressados, textComentarios;
+        TextView textNome, textLikes, textComentarios;
         ImageButton buttonLike, buttonComment;
         LinearLayout layoutComentarios;
         EditText editComentario;
         Button buttonEnviarComentario;
+        RecyclerView recyclerViewComentarios;
 
         public AnimalViewHolder(@NonNull View itemView) {
             super(itemView);
             imageAnimal = itemView.findViewById(R.id.imageViewAnimal);
             textNome = itemView.findViewById(R.id.textViewNome);
             textLikes = itemView.findViewById(R.id.textViewLikes);
-            textInteressados = itemView.findViewById(R.id.textViewInteressados);
+            textComentarios = itemView.findViewById(R.id.textComentarios);
             buttonLike = itemView.findViewById(R.id.buttonLike);
             buttonComment = itemView.findViewById(R.id.buttonComment);
-            layoutComentarios = itemView.findViewById(R.id.layoutComentarios);
-            textComentarios = itemView.findViewById(R.id.textComentarios);
+            recyclerViewComentarios = itemView.findViewById(R.id.recyclerViewComentarios);
             editComentario = itemView.findViewById(R.id.editComentario);
             buttonEnviarComentario = itemView.findViewById(R.id.buttonEnviarComentario);
+            layoutComentarios = itemView.findViewById(R.id.layoutComentarios);
         }
     }
 }

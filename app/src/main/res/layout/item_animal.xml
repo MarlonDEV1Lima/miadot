@@ -3,9 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="8dp"
+    android:layout_marginHorizontal="8dp"
+    android:layout_marginVertical="6dp"
     app:cardCornerRadius="12dp"
-    app:cardElevation="4dp">
+    app:cardElevation="1dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -13,27 +14,47 @@
         android:orientation="vertical"
         android:padding="12dp">
 
+        <!-- Cabeçalho do post: avatar e nome -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <ImageView
+                android:id="@+id/imageViewUserAvatar"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:src="@drawable/default_profile"
+                android:scaleType="centerCrop"
+                android:background="@drawable/circle_background"
+                android:contentDescription="Avatar do usuário" />
+
+            <TextView
+                android:id="@+id/textViewUserName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:text="Nome do Usuário"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="#000" />
+
+        </LinearLayout>
+
+        <!-- Imagem do animal/post -->
         <ImageView
             android:id="@+id/imageViewAnimal"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
+            android:layout_height="300dp"
+            android:layout_marginTop="8dp"
             android:scaleType="centerCrop"
             android:contentDescription="Imagem do animal" />
 
-        <TextView
-            android:id="@+id/textViewNome"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Nome do Animal"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:paddingTop="8dp" />
-
+        <!-- Barra de ações (like, comentar, compartilhar) -->
         <LinearLayout
-            android:id="@+id/layoutInteracoes"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical"
             android:orientation="horizontal"
             android:paddingTop="8dp">
 
@@ -44,70 +65,96 @@
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:contentDescription="Curtir"
                 android:src="@drawable/unlike"
-                app:tint="@android:color/holo_red_dark" />
-
-            <TextView
-                android:id="@+id/textViewLikes"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
-                android:text="0"
-                android:textSize="16sp" />
+                app:tint="@color/like_color" />
 
             <ImageButton
                 android:id="@+id/buttonComment"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
+                android:layout_marginStart="12dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:contentDescription="Comentar"
                 android:src="@drawable/outline_add_comment_24"
-                app:tint="@android:color/darker_gray" />
+                app:tint="@color/comment_color" />
 
-            <TextView
-                android:id="@+id/textViewInteressados"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="4dp"
-                android:text="0"
-                android:textSize="16sp" />
+            <ImageButton
+                android:id="@+id/buttonShare"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_marginStart="12dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Compartilhar"
+                android:src="@drawable/ic_share"
+                app:tint="@color/share_color" />
+
         </LinearLayout>
 
-        <!-- Área de comentários exibidos -->
+        <!-- Quantidade de likes -->
+        <TextView
+            android:id="@+id/textViewLikes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0 curtidas"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:layout_marginTop="6dp"
+            android:textColor="#000" />
+
+        <!-- Quantidade de comentários -->
+        <TextView
+            android:id="@+id/textComentarios"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0 comentários"
+            android:textSize="14sp"
+            android:layout_marginTop="2dp"
+            android:textColor="#000" />
+
+        <!-- Nome do animal + descrição -->
+        <TextView
+            android:id="@+id/textViewNome"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Nome do Animal"
+            android:textSize="14sp"
+            android:layout_marginTop="4dp"
+            android:textColor="#000" />
+
+        <!-- Layout que engloba comentários, campo de texto e botão enviar -->
         <LinearLayout
             android:id="@+id/layoutComentarios"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:visibility="gone"
-            android:paddingTop="8dp">
+            android:layout_marginTop="8dp">
 
-            <TextView
-                android:id="@+id/textComentarios"
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerViewComentarios"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text=""
-                android:textSize="14sp" />
+                android:nestedScrollingEnabled="false" />
+
+            <EditText
+                android:id="@+id/editComentario"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Adicione um comentário..."
+                android:inputType="text"
+                android:maxLines="3"
+                android:background="@drawable/edittext_background"
+                android:padding="8dp"
+                android:layout_marginTop="8dp" />
+
+            <Button
+                android:id="@+id/buttonEnviarComentario"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Publicar"
+                android:layout_gravity="end"
+                android:layout_marginTop="4dp" />
         </LinearLayout>
 
-        <!-- Campo para escrever comentário -->
-        <EditText
-            android:id="@+id/editComentario"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Escreva um comentário..."
-            android:visibility="gone"
-            android:inputType="textMultiLine"
-            android:maxLines="3"
-            android:paddingTop="8dp" />
-
-        <Button
-            android:id="@+id/buttonEnviarComentario"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Enviar"
-            android:visibility="gone"
-            android:layout_gravity="end"
-            android:paddingTop="8dp" />
-
     </LinearLayout>
+
 </androidx.cardview.widget.CardView>
