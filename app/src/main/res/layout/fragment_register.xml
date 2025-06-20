@@ -67,6 +67,67 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:padding="24dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Foto de Perfil"
+                    android:textColor="#C62828"
+                    android:layout_gravity="center_horizontal"
+                    android:textSize="14sp"
+                    android:layout_marginTop="8dp" />
+                <ImageView
+                    android:id="@+id/imageViewProfile"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginBottom="12dp"
+                    android:src="@drawable/default_profile"
+                    android:scaleType="centerCrop"
+                    android:background="@drawable/circle_background" />
+
+
+                <Button
+                    android:id="@+id/buttonSelectImage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:text="Escolher Foto" />
+
+                <!-- Nome completo -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Nome completo"
+                    android:textColor="#C62828"
+                    android:textSize="14sp" />
+
+                <EditText
+                    android:id="@+id/editTextRegisterFullName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Ex: Ana Silva"
+                    android:inputType="textPersonName"
+                    android:background="@android:color/transparent"
+                    android:paddingBottom="8dp"
+                    android:layout_marginBottom="16dp" />
+
+                <!-- Apelido -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Apelido"
+                    android:textColor="#C62828"
+                    android:textSize="14sp" />
+
+                <EditText
+                    android:id="@+id/editTextRegisterNickname"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Ex: Aninha"
+                    android:inputType="text"
+                    android:background="@android:color/transparent"
+                    android:paddingBottom="8dp"
+                    android:layout_marginBottom="16dp" />
 
                 <!-- Email -->
                 <TextView

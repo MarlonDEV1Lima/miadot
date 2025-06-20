@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#CC000000">
+
+    <ImageView
+        android:id="@+id/imageViewZoom"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="fitCenter"
+        android:contentDescription="Imagem ampliada" />
+
+    <TextView
+        android:id="@+id/textViewAnimalName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#FFFFFF"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:padding="16dp"
+        android:layout_gravity="top|start" />
+
+    <LinearLayout
+        android:id="@+id/layoutInfoBottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="#DD000000"
+        android:padding="16dp"
+        android:layout_gravity="bottom">
+
+        <TextView
+            android:id="@+id/textViewLikesPopup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#FFFFFF"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/textViewCommentsPopup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#FFFFFF"
+            android:textSize="14sp"
+            android:paddingTop="8dp"
+            android:maxLines="4"
+            android:ellipsize="end" />
+    </LinearLayout>
+
+</FrameLayout>

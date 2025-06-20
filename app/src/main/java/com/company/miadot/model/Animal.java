@@ -13,6 +13,9 @@ public class Animal {
     private String imageURL;
     private Integer likes;
     private int interessados;
+
+    private String userId; // id de quem publicou
+
     private Map<String, Boolean> curtidas = new HashMap<>();
 
     public Map<String, Boolean> getCurtidas() {
@@ -25,13 +28,7 @@ public class Animal {
 
 
 
-    public Animal(String id, String nome, String imageURL, Integer likes, int interessados) {
-        this.id = id;
-        this.nome = nome;
-        this.imageURL = imageURL;
-        this.likes = likes;
-        this.interessados = interessados;
-    }
+
 
     // Getters e setters
     public String getId() { return id; }
@@ -84,4 +81,6 @@ public class Animal {
     public void setDonoId(String donoId) {
         this.donoId = donoId;
     }
+    public String getUserId() { return userId; }
+    public void setUserId(String userId) { this.userId = userId; }
 }

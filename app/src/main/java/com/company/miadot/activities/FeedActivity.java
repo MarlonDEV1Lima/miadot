@@ -3,6 +3,8 @@ package com.company.miadot.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -13,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.company.miadot.R;
 import com.company.miadot.adapters.AnimalAdapter;
 import com.company.miadot.model.Animal;
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
@@ -20,8 +23,8 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.ListenerRegistration;
 
@@ -35,87 +38,119 @@ public class FeedActivity extends AppCompatActivity {
     private List<Animal> animalList = new ArrayList<>();
     private FirebaseFirestore db;
     private ListenerRegistration listener;
+    private ShimmerFrameLayout shimmerFrameLayout;
+
+    private boolean isLoading = false;
+    private boolean isLastPage = false;
+    private String lastKey = null;
+    private final int PAGE_SIZE = 10;
+
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_feed);
 
-        // RecyclerView
-        recyclerView = findViewById(R.id.recyclerViewAnimais);
+        shimmerFrameLayout = findViewById(R.id.shimmerLayout);
+        recyclerView = findViewById(R.id.recyclerViewAnimais); // ← Agora está na ordem certa
+
+        shimmerFrameLayout.startShimmer();
+        shimmerFrameLayout.setVisibility(View.VISIBLE);
+        recyclerView.setVisibility(View.GONE);
+
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new AnimalAdapter(this, animalList);
         recyclerView.setAdapter(adapter);
 
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+
+                LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+                int visibleItemCount = layoutManager.getChildCount();
+                int totalItemCount = layoutManager.getItemCount();
+                int firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition();
+
+                if (!isLoading && !isLastPage) {
+                    if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount
+                            && firstVisibleItemPosition >= 0
+                            && totalItemCount >= PAGE_SIZE) {
+                        carregarAnimaisPaginado();
+                    }
+                }
+            }
+        });
+
         FloatingActionButton fab = findViewById(R.id.fabAdicionar);
         fab.setOnClickListener(v -> startActivity(new Intent(this, CadastrarAnimalActivity.class)));
-        // Bottom menu
-        BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
 
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
         bottomNavigationView.setOnItemSelectedListener(item -> {
             int itemId = item.getItemId();
-
-            if (itemId == R.id.nav_feed) {
-                // Já está no feed
-                return true;
-
-            } else if (itemId == R.id.nav_add) {
-                startActivity(new Intent(this, CadastrarAnimalActivity.class));
-                return true;
-
-            } else if (itemId == R.id.nav_profile) {
-                startActivity(new Intent(this, PerfilActivity.class));
-                return true;
-
-            } else if (itemId == R.id.nav_settings) {
-                startActivity(new Intent(this, ConfiguracoesActivity.class));
-                return true;
-
-            } else if (itemId == R.id.nav_logout) {
+            if (itemId == R.id.nav_feed) return true;
+            if (itemId == R.id.nav_add) startActivity(new Intent(this, CadastrarAnimalActivity.class));
+            else if (itemId == R.id.nav_profile) startActivity(new Intent(this, PerfilActivity.class));
+            else if (itemId == R.id.nav_settings) startActivity(new Intent(this, ConfiguracoesActivity.class));
+            else if (itemId == R.id.nav_logout) {
                 FirebaseAuth.getInstance().signOut();
                 startActivity(new Intent(this, LoginActivity.class));
                 finish();
-                return true;
             }
-
-            return false;
+            return true;
         });
 
         db = FirebaseFirestore.getInstance();
-        carregarAnimais();
+        carregarAnimaisPaginado();
     }
 
-    private void carregarAnimais() {
+    private void carregarAnimaisPaginado() {
+        isLoading = true;
+        shimmerFrameLayout.setVisibility(View.VISIBLE);
+        recyclerView.setVisibility(View.GONE);
+
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference("animais");
-        ref.addValueEventListener(new ValueEventListener() {
+        Query query = (lastKey == null) ? ref.orderByKey().limitToFirst(PAGE_SIZE)
+                : ref.orderByKey().startAfter(lastKey).limitToFirst(PAGE_SIZE);
+
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                animalList.clear();
+                int count = 0;
                 for (DataSnapshot child : snapshot.getChildren()) {
                     Animal animal = child.getValue(Animal.class);
                     if (animal != null) {
-                        // Setar o id do animal com a key do snapshot (ID do nó no Realtime Database)
                         animal.setId(child.getKey());
                         animalList.add(animal);
+                        lastKey = child.getKey();
+                        count++;
                     }
                 }
-                Log.d("FeedActivity", "Número de animais: " + animalList.size());
+
                 adapter.notifyDataSetChanged();
+                isLoading = false;
+                shimmerFrameLayout.stopShimmer();
+                shimmerFrameLayout.setVisibility(View.GONE);
+                recyclerView.setVisibility(View.VISIBLE);
+
+                if (count < PAGE_SIZE) isLastPage = true;
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Log.e("FeedActivity", "Erro ao carregar animais", error.toException());
+                isLoading = false;
+                shimmerFrameLayout.stopShimmer();
+                shimmerFrameLayout.setVisibility(View.GONE);
+                recyclerView.setVisibility(View.VISIBLE);
+                Log.e("FeedActivity", "Erro na paginação", error.toException());
             }
         });
     }
 
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (listener != null) {
-            listener.remove();
-        }
+        if (listener != null) listener.remove();
     }
 }
