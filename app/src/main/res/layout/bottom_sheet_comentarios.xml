@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/white"
+    android:orientation="vertical"
+    android:padding="12dp">
+
+    <TextView
+        android:id="@+id/tituloComentarios"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Comentários"
+        android:textStyle="bold"
+        android:textSize="18sp"
+        android:paddingBottom="8dp" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerComentariosBottom"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:overScrollMode="always"
+        android:scrollbars="vertical" />
+
+    <TextView
+        android:id="@+id/verMaisComentarios"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingStart="12dp"
+        android:paddingTop="4dp"
+        android:text="Ver mais comentários"
+        android:textColor="@color/link_color"
+        android:textStyle="bold"
+        android:visibility="gone" />
+
+    <EditText
+        android:id="@+id/editNovoComentario"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Adicione um comentário..."
+        android:inputType="text"
+        android:maxLength="200"
+        android:maxLines="3"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/edittext_background"
+        android:padding="8dp" />
+
+    <Button
+        android:id="@+id/buttonPublicarComentario"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Publicar"
+        android:layout_gravity="end"
+        android:layout_marginTop="4dp" />
+</LinearLayout>

@@ -4,13 +4,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.company.miadot.R;
 import com.company.miadot.adapters.AnimalAdapter;
@@ -39,13 +39,12 @@ public class FeedActivity extends AppCompatActivity {
     private FirebaseFirestore db;
     private ListenerRegistration listener;
     private ShimmerFrameLayout shimmerFrameLayout;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     private boolean isLoading = false;
     private boolean isLastPage = false;
     private String lastKey = null;
     private final int PAGE_SIZE = 10;
-
-
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -53,7 +52,8 @@ public class FeedActivity extends AppCompatActivity {
         setContentView(R.layout.activity_feed);
 
         shimmerFrameLayout = findViewById(R.id.shimmerLayout);
-        recyclerView = findViewById(R.id.recyclerViewAnimais); // ← Agora está na ordem certa
+        swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout);
+        recyclerView = findViewById(R.id.recyclerViewAnimais);
 
         shimmerFrameLayout.startShimmer();
         shimmerFrameLayout.setVisibility(View.VISIBLE);
@@ -62,6 +62,11 @@ public class FeedActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new AnimalAdapter(this, animalList);
         recyclerView.setAdapter(adapter);
+
+        swipeRefreshLayout.setOnRefreshListener(() -> {
+            resetPaginacao();
+            carregarAnimaisPaginado();
+        });
 
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -105,9 +110,17 @@ public class FeedActivity extends AppCompatActivity {
         carregarAnimaisPaginado();
     }
 
+    private void resetPaginacao() {
+        lastKey = null;
+        isLastPage = false;
+        animalList.clear();
+        adapter.notifyDataSetChanged();
+    }
+
     private void carregarAnimaisPaginado() {
         isLoading = true;
         shimmerFrameLayout.setVisibility(View.VISIBLE);
+        shimmerFrameLayout.startShimmer();
         recyclerView.setVisibility(View.GONE);
 
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference("animais");
@@ -133,6 +146,7 @@ public class FeedActivity extends AppCompatActivity {
                 shimmerFrameLayout.stopShimmer();
                 shimmerFrameLayout.setVisibility(View.GONE);
                 recyclerView.setVisibility(View.VISIBLE);
+                swipeRefreshLayout.setRefreshing(false);
 
                 if (count < PAGE_SIZE) isLastPage = true;
             }
@@ -143,6 +157,7 @@ public class FeedActivity extends AppCompatActivity {
                 shimmerFrameLayout.stopShimmer();
                 shimmerFrameLayout.setVisibility(View.GONE);
                 recyclerView.setVisibility(View.VISIBLE);
+                swipeRefreshLayout.setRefreshing(false);
                 Log.e("FeedActivity", "Erro na paginação", error.toException());
             }
         });
