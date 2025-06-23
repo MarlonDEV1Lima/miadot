@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.company.miadot.R;
+import com.company.miadot.activities.TimeUtils;
 import com.company.miadot.model.Comentarios;
 import com.google.firebase.database.*;
 
@@ -62,6 +63,10 @@ public class ComentarioAdapter extends RecyclerView.Adapter<ComentarioAdapter.Vi
 
         holder.textNomeUsuario.setText(comentario.getNome());
         holder.textComentario.setText(comentario.getTexto());
+        if (holder.textTempo != null) {
+            holder.textTempo.setText(TimeUtils.getTimeAgo(comentario.getTimestamp()));
+        }
+
 
         if (comentario.getFotoUrl() != null && !comentario.getFotoUrl().isEmpty()) {
             Glide.with(context)
@@ -139,9 +144,13 @@ public class ComentarioAdapter extends RecyclerView.Adapter<ComentarioAdapter.Vi
         TextView textResponder; // visível só em comentário principal
         ImageView imageAvatar;
         RecyclerView recyclerRespostas; // usado somente se não for resposta
+        TextView textTempo;
 
         public ViewHolder(@NonNull View itemView, int tipo) {
             super(itemView);
+
+            textTempo = itemView.findViewById(R.id.textTempo);
+
             if (tipo == TIPO_COMENTARIO) {
                 textNomeUsuario = itemView.findViewById(R.id.textNomeUsuario);
                 textComentario = itemView.findViewById(R.id.textComentario);

@@ -3,4 +3,5 @@
     <string name="entrar">Entrar</string>
     <string name="senha">Senha</string>
     <string name="e_mail">E-mail</string>
+    <string name="perfil">Foto do perfil</string>
 </resources>

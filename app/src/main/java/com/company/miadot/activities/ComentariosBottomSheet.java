@@ -102,8 +102,19 @@ public class ComentariosBottomSheet extends BottomSheetDialogFragment {
                         // Contar total de comentários
                         comentariosRef.addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
-                            public void onDataChange(@NonNull DataSnapshot totalSnapshot) {
-                                long total = totalSnapshot.getChildrenCount();
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                List<Comentarios> lista = new ArrayList<>();
+                                long total = snapshot.getChildrenCount();
+
+                                for (DataSnapshot snap : snapshot.getChildren()) {
+                                    Comentarios c = snap.getValue(Comentarios.class);
+                                    if (c != null) lista.add(c);
+                                }
+
+                                Collections.reverse(lista);
+                                listaComentarios.clear();
+                                listaComentarios.addAll(lista.subList(0, Math.min(lista.size(), comentariosVisiveis)));
+                                adapter.notifyDataSetChanged();
 
                                 if (total > comentariosVisiveis) {
                                     verMaisComentarios.setVisibility(View.VISIBLE);
@@ -118,8 +129,11 @@ public class ComentariosBottomSheet extends BottomSheetDialogFragment {
                             }
 
                             @Override
-                            public void onCancelled(@NonNull DatabaseError error) {}
+                            public void onCancelled(@NonNull DatabaseError error) {
+                                Log.e("Firebase", "Erro ao carregar comentários", error.toException());
+                            }
                         });
+
                     }
 
                     @Override
