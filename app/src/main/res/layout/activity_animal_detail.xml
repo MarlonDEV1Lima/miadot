@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    android:background="#FFFFFF"
+    tools:context=".activities.AnimalDetailActivity">
+
+    <!-- Imagem do animal -->
+    <ImageView
+        android:id="@+id/imageAnimalDetail"
+        android:layout_width="0dp"
+        android:layout_height="300dp"
+        android:scaleType="centerCrop"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Nome do animal -->
+    <TextView
+        android:id="@+id/textNomeAnimal"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Nome do Animal"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toBottomOf="@id/imageAnimalDetail"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Descrição -->
+    <TextView
+        android:id="@+id/textDescricao"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Descrição do animal aqui"
+        android:textSize="16sp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@id/textNomeAnimal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Idade -->
+    <TextView
+        android:id="@+id/textIdade"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Idade: "
+        android:textSize="14sp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@id/textDescricao"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Estado -->
+    <TextView
+        android:id="@+id/textEstado"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Estado: "
+        android:textSize="14sp"
+        android:layout_marginTop="4dp"
+        app:layout_constraintTop_toBottomOf="@id/textIdade"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

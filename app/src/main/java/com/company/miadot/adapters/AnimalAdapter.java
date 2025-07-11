@@ -2,6 +2,7 @@ package com.company.miadot.adapters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
@@ -18,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.company.miadot.R;
 import com.company.miadot.activities.ComentariosBottomSheet;
+import com.company.miadot.activities.ProfileActivity;
 import com.company.miadot.model.Animal;
 import com.company.miadot.model.Comentarios;
 import com.google.firebase.auth.FirebaseAuth;
@@ -69,6 +71,13 @@ public class AnimalAdapter extends RecyclerView.Adapter<AnimalAdapter.AnimalView
                     } else {
                         holder.imageViewUserAvatar.setImageResource(R.drawable.default_profile);
                     }
+
+                    // Aqui você coloca o clique para abrir o perfil do usuário
+                    holder.imageViewUserAvatar.setOnClickListener(v -> {
+                        Intent intent = new Intent(context, ProfileActivity.class);
+                        intent.putExtra("userId", donoId); // passa o dono do animal para abrir perfil
+                        context.startActivity(intent);
+                    });
                 }
 
                 @Override
@@ -78,6 +87,7 @@ public class AnimalAdapter extends RecyclerView.Adapter<AnimalAdapter.AnimalView
                 }
             });
         }
+
 
         holder.buttonComment.setOnClickListener(v -> {
             ComentariosBottomSheet.novaInstancia(animal.getId())

@@ -1,4 +1,4 @@
 package com.company.miadot.activities;
 
-public class PerfilActivity {
+public interface OnAnimalClickListener {
 }
