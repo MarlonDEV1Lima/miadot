@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="72dp"
+    android:padding="8dp">
+
+    <ImageView
+        android:id="@+id/imageBadge"
+        android:layout_width="12dp"
+        android:layout_height="12dp"
+        android:src="@android:color/holo_red_dark"
+        android:background="@android:color/transparent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="8dp"
+        android:visibility="invisible"
+        android:contentDescription="@string/badge_nova_mensagem"/>
+
+    <TextView
+        android:id="@+id/textNome"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/nome_usuario_exemplo"
+        android:textStyle="bold"
+        android:textSize="16sp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/imageBadge"
+        android:maxLines="1"
+        android:ellipsize="end"/>
+
+    <TextView
+        android:id="@+id/textMensagem"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/ultima_mensagem_exemplo"
+        android:textSize="14sp"
+        android:textColor="#666"
+        app:layout_constraintTop_toBottomOf="@id/textNome"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:maxLines="1"
+        android:ellipsize="end"/>
+
+    <TextView
+        android:id="@+id/textData"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/data_chat_exemplo"
+        android:textSize="12sp"
+        android:textColor="#888"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textMensagem"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

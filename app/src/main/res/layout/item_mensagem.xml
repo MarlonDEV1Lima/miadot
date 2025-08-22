@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="8dp">
+
+    <!-- Container para mensagem recebida -->
+    <LinearLayout
+        android:id="@+id/layoutMensagemRecebida"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_gravity="start"
+        android:visibility="gone">
+
+        <!-- Nome do remetente -->
+        <TextView
+            android:id="@+id/textNomeRemetente"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Nome do usuário"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:textColor="@android:color/darker_gray"
+            android:layout_marginBottom="2dp"
+            android:layout_marginStart="4dp" />
+
+        <!-- Balão da mensagem recebida -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/bg_mensagem_recebida"
+            android:padding="12dp"
+            android:layout_marginEnd="60dp">
+
+            <TextView
+                android:id="@+id/textMensagemRecebida"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Mensagem recebida"
+                android:textSize="16sp"
+                android:textColor="#222" />
+
+            <TextView
+                android:id="@+id/textDataRecebida"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="12:34"
+                android:textSize="11sp"
+                android:textColor="#888"
+                android:layout_gravity="end"
+                android:layout_marginTop="4dp" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- Container para mensagem enviada -->
+    <LinearLayout
+        android:id="@+id/layoutMensagemEnviada"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_gravity="end"
+        android:visibility="gone">
+
+        <!-- Balão da mensagem enviada -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/bg_mensagem_enviada"
+            android:padding="12dp"
+            android:layout_marginStart="60dp">
+
+            <TextView
+                android:id="@+id/textMensagemEnviada"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Mensagem enviada"
+                android:textSize="16sp"
+                android:textColor="#FFFFFF" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_gravity="end"
+                android:layout_marginTop="4dp">
+
+                <TextView
+                    android:id="@+id/textDataEnviada"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="12:34"
+                    android:textSize="11sp"
+                    android:textColor="#E0E0E0"
+                    android:layout_marginEnd="4dp" />
+
+                <ImageView
+                    android:id="@+id/imageStatus"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:src="@drawable/ic_check"
+                    android:layout_gravity="center_vertical"
+                    android:contentDescription="Status da mensagem"
+                    android:tint="#E0E0E0" />
+
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

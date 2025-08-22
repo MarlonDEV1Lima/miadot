@@ -1,7 +1,6 @@
 package com.company.miadot.adapters;
 
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,19 +11,23 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.company.miadot.R;
-import com.company.miadot.activities.AnimalDetailActivity;
+import com.company.miadot.activities.OnAnimalClickListener;
 import com.company.miadot.model.Animal;
 
 import java.util.List;
+import android.util.Log;
 
 public class ProfileAnimalAdapter extends RecyclerView.Adapter<ProfileAnimalAdapter.AnimalViewHolder> {
 
     private Context context;
     private List<Animal> animalList;
+    private OnAnimalClickListener listener; // Nova variável para armazenar o listener
 
-    public ProfileAnimalAdapter(Context context, List<Animal> animalList) {
+    // Modifique o construtor para aceitar o OnAnimalClickListener
+    public ProfileAnimalAdapter(Context context, List<Animal> animalList, OnAnimalClickListener listener) {
         this.context = context;
         this.animalList = animalList;
+        this.listener = listener; // Atribui o listener passado
     }
 
     @NonNull
@@ -37,23 +40,30 @@ public class ProfileAnimalAdapter extends RecyclerView.Adapter<ProfileAnimalAdap
     @Override
     public void onBindViewHolder(@NonNull AnimalViewHolder holder, int position) {
         Animal animal = animalList.get(position);
-        Glide.with(context).load(animal.getImageURL()).into(holder.imageAnimal);
 
+        // Carrega a imagem do animal. Assumindo que getImageURL() é o método correto
+        // para obter a URL da imagem no seu objeto Animal.
+        if (animal.getImageURL() != null && !animal.getImageURL().isEmpty()) {
+            Glide.with(context)
+                    .load(animal.getImageURL())
+                    .into(holder.imageAnimal);
+        } else {
+            // Define uma imagem de placeholder se a URL for nula ou vazia
+            holder.imageAnimal.setImageResource(R.drawable.default_profile);
+        }
+
+        // Define o OnClickListener para o item.
+        // Ao invés de iniciar uma nova Activity, chamamos o método no listener
+        // (que é a ProfileActivity), que por sua vez exibirá o DialogFragment.
         holder.itemView.setOnClickListener(v -> {
-            Intent intent = new Intent(context, AnimalDetailActivity.class);
-            intent.putExtra("animalId", animal.getId());
-            context.startActivity(intent);
+            if (listener != null) {
+                android.util.Log.d("ProfileAdapter", "Item de animal clicado: " + animal.getNome()); // Adicione esta linha
+                listener.onAnimalClick(animal);
+            }
         });
 
-        holder.itemView.setOnClickListener(v -> {
-            Intent intent = new Intent(context, AnimalDetailActivity.class);
-            intent.putExtra("imageUrl", animal.getImageURL());
-            intent.putExtra("nome", animal.getNome());
-            intent.putExtra("descricao", animal.getDescricao());
-            intent.putExtra("idade", animal.getIdade());
-            intent.putExtra("estado", animal.getEstado());
-            context.startActivity(intent);
-        });
+        // Removi o segundo holder.itemView.setOnClickListener() que estava duplicado
+        // e sobrescrevia o primeiro, além de iniciar a AnimalDetailActivity.
     }
 
     @Override

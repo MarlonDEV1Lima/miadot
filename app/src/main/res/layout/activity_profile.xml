@@ -4,72 +4,243 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFFFF"
+    android:background="@color/instagram_white"
     tools:context=".activities.ProfileActivity">
 
-    <!-- Foto de perfil -->
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/imageProfile"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_marginTop="16dp"
+    <!-- Instagram-style Toolbar -->
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/topAppBarProfile"
+        android:layout_width="0dp"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/instagram_white"
+        android:elevation="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:src="@drawable/default_profile"
-        android:background="@drawable/circle_background" />
+        app:navigationIcon="@drawable/ic_arrow_back_24">
 
-    <!-- Nome completo -->
-    <TextView
-        android:id="@+id/textNomeUsuario"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Nome do Usuário"
-        android:textStyle="bold"
-        android:textColor="#444444"
-        android:textSize="18sp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintTop_toBottomOf="@id/imageProfile"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Perfil"
+            android:textColor="@color/instagram_gray_text"
+            android:textSize="18sp"
+            android:fontFamily="sans-serif-medium"
+            android:layout_gravity="center" />
 
-    <!-- Apelido -->
+    </com.google.android.material.appbar.MaterialToolbar>
 
-    <!-- Contador de animais -->
-    <TextView
-        android:id="@+id/textApelido"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:text="apelido"
-        android:textColor="#777"
-        android:textSize="14sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textNomeUsuario" />
-
-    <TextView
-        android:id="@+id/textContagemAnimais"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="0 animais cadastrados"
-        android:textSize="14sp"
-        android:layout_marginTop="12dp"
-        app:layout_constraintTop_toBottomOf="@id/textApelido"
+    <!-- Divider line -->
+    <View
+        android:id="@+id/divider"
+        android:layout_width="0dp"
+        android:layout_height="0.5dp"
+        android:background="@color/instagram_gray_medium"
+        app:layout_constraintTop_toBottomOf="@id/topAppBarProfile"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- RecyclerView em Grid -->
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerViewAnimaisPerfil"
+    <androidx.core.widget.NestedScrollView
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="16dp"
-        android:clipToPadding="false"
-        android:padding="4dp"
-        app:layout_constraintTop_toBottomOf="@id/textContagemAnimais"
+        app:layout_constraintTop_toBottomOf="@id/divider"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- Instagram-style Profile Header -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="16dp"
+                android:gravity="center_vertical">
+
+                <!-- Profile Picture -->
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/imageProfile"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:src="@drawable/ic_profile_outline"
+                    android:scaleType="centerCrop"
+                    android:layout_marginEnd="24dp"
+                    app:civ_border_width="2dp"
+                    app:civ_border_color="@color/instagram_gray_medium" />
+
+                <!-- Stats (Posts, Followers, Following) -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:gravity="center">
+
+                        <TextView
+                            android:id="@+id/textPostsCount"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="0"
+                            android:textSize="18sp"
+                            android:textColor="@color/instagram_gray_text"
+                            android:fontFamily="sans-serif-medium" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Posts"
+                            android:textSize="12sp"
+                            android:textColor="@color/instagram_gray_dark"
+                            android:fontFamily="sans-serif" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:gravity="center">
+
+                        <TextView
+                            android:id="@+id/textFollowersCount"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="0"
+                            android:textSize="18sp"
+                            android:textColor="@color/instagram_gray_text"
+                            android:fontFamily="sans-serif-medium" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Seguidores"
+                            android:textSize="12sp"
+                            android:textColor="@color/instagram_gray_dark"
+                            android:fontFamily="sans-serif" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:gravity="center">
+
+                        <TextView
+                            android:id="@+id/textFollowingCount"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="0"
+                            android:textSize="18sp"
+                            android:textColor="@color/instagram_gray_text"
+                            android:fontFamily="sans-serif-medium" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Seguindo"
+                            android:textSize="12sp"
+                            android:textColor="@color/instagram_gray_dark"
+                            android:fontFamily="sans-serif" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <!-- Profile Info -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:paddingBottom="16dp">
+
+                <TextView
+                    android:id="@+id/textName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Nome do Usuário"
+                    android:textSize="14sp"
+                    android:textColor="@color/instagram_gray_text"
+                    android:fontFamily="sans-serif-medium"
+                    android:layout_marginBottom="4dp"
+                    tools:text="João Silva" />
+
+                <TextView
+                    android:id="@+id/textBio"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Bio do usuário"
+                    android:textSize="14sp"
+                    android:textColor="@color/instagram_gray_text"
+                    android:fontFamily="sans-serif"
+                    android:layout_marginBottom="16dp"
+                    tools:text="Amante dos animais 🐾" />
+
+            </LinearLayout>
+
+            <!-- Profile info section -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:paddingBottom="16dp">
+
+                <TextView
+                    android:id="@+id/textApelido"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Nome do usuário"
+                    android:textSize="16sp"
+                    android:textColor="@color/instagram_gray_text"
+                    android:fontFamily="sans-serif-medium"
+                    android:layout_marginBottom="8dp" />
+
+            </LinearLayout>
+
+            <!-- Divider -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/instagram_gray_medium"
+                android:layout_marginTop="8dp" />
+
+            <!-- Posts Grid -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerUserPosts"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false"
+                android:layout_marginTop="1dp"
+                tools:listitem="@layout/item_animal_profile" />
+
+            <!-- Animals grid -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerViewAnimaisPerfil"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false"
+                android:padding="1dp" />
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

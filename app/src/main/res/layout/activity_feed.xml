@@ -5,121 +5,254 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F9F9F9"
+    android:background="@color/instagram_white"
     tools:context=".activities.FeedActivity">
 
-    <!-- Toolbar fixa no topo -->
+    <!-- Instagram-style Toolbar -->
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/topAppBar"
         android:layout_width="0dp"
         android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
-        app:title="Miadot"
-        app:titleTextColor="@android:color/white"
-        app:menu="@menu/top_app_bar_menu"
-        app:layout_constraintTop_toTopOf="parent"
+        android:background="@color/instagram_white"
+        android:elevation="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Miadot"
+                android:textSize="24sp"
+                android:textColor="@color/instagram_gray_text"
+                android:fontFamily="sans-serif-light"
+                android:gravity="start|center_vertical" />
+
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp">
+
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/fabMessages"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/ic_message_outline"
+                    app:fabSize="mini"
+                    app:backgroundTint="@color/instagram_white"
+                    app:tint="@color/instagram_gray_text"
+                    app:borderWidth="0dp"
+                    app:elevation="0dp"
+                    android:contentDescription="Mensagens" />
+
+                <TextView
+                    android:id="@+id/badgeMessages"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:layout_gravity="top|end"
+                    android:background="@drawable/badge_background"
+                    android:gravity="center"
+                    android:textColor="@android:color/white"
+                    android:textSize="10sp"
+                    android:visibility="gone" />
+
+            </FrameLayout>
+
+        </LinearLayout>
+
+    </com.google.android.material.appbar.MaterialToolbar>
+
+    <!-- Divider line -->
+    <View
+        android:id="@+id/divider"
+        android:layout_width="0dp"
+        android:layout_height="0.5dp"
+        android:background="@color/instagram_gray_medium"
+        app:layout_constraintTop_toBottomOf="@id/topAppBar"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- BottomNavigationView fixa no fim da tela -->
-
-    <!-- SwipeRefreshLayout com RecyclerView entre Toolbar e BottomNavigation -->
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottomNavigationView"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="@android:color/white"
-        android:elevation="8dp"
-        app:itemIconTint="@color/black"
-        app:itemTextColor="@color/black"
-        app:labelVisibilityMode="labeled"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:menu="@menu/menu_bottom" />
-
+    <!-- SwipeRefreshLayout with RecyclerView and Shimmer -->
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipeRefreshLayout"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:clipToPadding="false"
-        android:padding="8dp"
         app:layout_constraintBottom_toTopOf="@id/bottomNavigationView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/topAppBar">
+        app:layout_constraintTop_toBottomOf="@id/divider">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerViewAnimais"
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:clipToPadding="false"
-            android:paddingBottom="8dp" />
+            android:layout_height="match_parent">
+
+            <!-- Shimmer loading effect -->
+            <com.facebook.shimmer.ShimmerFrameLayout
+                android:id="@+id/shimmerLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="visible">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <include layout="@layout/item_shimmer" />
+                    <include layout="@layout/item_shimmer" />
+                    <include layout="@layout/item_shimmer" />
+                    <include layout="@layout/item_shimmer" />
+
+                </LinearLayout>
+
+            </com.facebook.shimmer.ShimmerFrameLayout>
+
+            <!-- RecyclerView -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerViewAnimais"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/instagram_white"
+                android:clipToPadding="false"
+                android:visibility="gone"
+                tools:listitem="@layout/item_animal" />
+
+        </FrameLayout>
+
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-    <!-- ShimmerFrameLayout na mesma área do SwipeRefreshLayout -->
-    <com.facebook.shimmer.ShimmerFrameLayout
-        android:id="@+id/shimmerLayout"
+    <!-- Instagram-style bottom navigation -->
+    <LinearLayout
+        android:id="@+id/bottomNavigationView"
         android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:visibility="gone"
-        app:shimmer_auto_start="true"
-        app:shimmer_duration="1500"
-        app:layout_constraintTop_toBottomOf="@id/topAppBar"
-        app:layout_constraintBottom_toTopOf="@id/bottomNavigationView"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        android:layout_height="60dp"
+        android:orientation="vertical"
+        android:background="@color/instagram_white"
+        android:elevation="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
+        <!-- Top divider -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/instagram_gray_medium" />
+
+        <!-- Navigation items -->
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="16dp">
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:baselineAligned="false">
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="150dp"
-                android:background="@color/light_gray" />
+            <LinearLayout
+                android:id="@+id/nav_home"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:background="?android:attr/selectableItemBackground">
 
-            <View
-                android:layout_width="60dp"
-                android:layout_height="15dp"
-                android:layout_marginTop="12dp"
-                android:background="@color/light_gray" />
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_home_outline"
+                    android:layout_marginBottom="4dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Início"
+                    android:textSize="10sp"
+                    android:textColor="@color/instagram_gray_text" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/nav_add"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:background="?android:attr/selectableItemBackground">
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_add_outline"
+                    android:layout_marginBottom="4dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Adicionar"
+                    android:textSize="10sp"
+                    android:textColor="@color/instagram_gray_dark" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/nav_messages"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:background="?android:attr/selectableItemBackground">
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_message_outline"
+                    android:layout_marginBottom="4dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Mensagens"
+                    android:textSize="10sp"
+                    android:textColor="@color/instagram_gray_dark" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/nav_profile"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:background="?android:attr/selectableItemBackground">
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_profile_outline"
+                    android:layout_marginBottom="4dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Perfil"
+                    android:textSize="10sp"
+                    android:textColor="@color/instagram_gray_dark" />
+
+            </LinearLayout>
+
         </LinearLayout>
-    </com.facebook.shimmer.ShimmerFrameLayout>
 
-    <!-- Floating Action Button para adicionar animal -->
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fabAdicionar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:contentDescription="Adicionar animal"
-        android:src="@drawable/outline_add"
-        app:backgroundTint="@color/black"
-        app:tint="@android:color/white"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginBottom="0dp"
-        android:translationY="-35dp" />
+    </LinearLayout>
 
-    <!-- ImageView flutuante sobre o item de perfil -->
-    <ImageView
-        android:id="@+id/imageProfile"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="15dp"
-        android:layout_marginBottom="8dp"
-        android:background="@drawable/circle_background"
-        android:clickable="true"
-        android:contentDescription="@string/perfil"
-        android:elevation="115dp"
-        android:focusable="true"
-        android:scaleType="centerCrop"
-        android:translationY="-25dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+    <!-- Botões flutuantes removidos - usar apenas o botão do menu inferior -->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

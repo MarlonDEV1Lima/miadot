@@ -1,9 +1,11 @@
 package com.company.miadot.model;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
+import android.util.Log;
 
-public class Animal {
+public class Animal  implements Serializable {
     private String id;
     private String nome;
     private String idade;

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="12dp"
+    android:gravity="center_vertical"
+    android:background="@color/instagram_white">
+
+    <!-- Profile Image -->
+    <ImageView
+        android:id="@+id/profileImage"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:src="@drawable/ic_profile_outline"
+        android:background="@drawable/circle_shape"
+        android:scaleType="centerCrop"
+        android:layout_marginEnd="12dp" />
+
+    <!-- User Info -->
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textViewUsuario"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="usuario"
+            android:textSize="14sp"
+            android:textColor="@color/instagram_gray_text"
+            android:fontFamily="sans-serif-medium"
+            tools:text="usuario123" />
+
+        <TextView
+            android:id="@+id/textViewLocalizacao"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Localização"
+            android:textSize="12sp"
+            android:textColor="@color/instagram_gray_dark"
+            android:fontFamily="sans-serif"
+            android:visibility="gone"
+            tools:text="São Paulo, SP" />
+
+    </LinearLayout>
+
+    <!-- More Options Button -->
+    <ImageView
+        android:id="@+id/btnMore"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:src="@drawable/ic_more_vert"
+        android:background="?android:attr/selectableItemBackgroundBorderless"
+        android:padding="4dp"
+        android:contentDescription="Mais opções" />
+
+</LinearLayout>

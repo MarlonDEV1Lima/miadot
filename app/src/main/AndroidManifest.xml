@@ -30,22 +30,34 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".activities.HomeActivity" />
+        <activity android:name=".activities.HomeActivity"
+            android:windowSoftInputMode="adjustResize"/> <!-- Adicionado ou ajustado -->
 
         <activity android:name=".activities.MainActivity"  android:exported="true"
-            >
+            android:windowSoftInputMode="adjustResize" > <!-- Adicionado ou ajustado -->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
 
-        <activity android:name=".activities.FeedActivity" />
+        <activity android:name=".activities.FeedActivity"
+            android:windowSoftInputMode="adjustResize"/> <!-- Adicionado ou ajustado -->
 
         <activity android:name=".activities.CadastrarAnimalActivity" />
         <activity android:name=".activities.ProfileActivity" />
-        <activity android:name=".activities.AnimalDetailActivity"/>
+        <activity android:name=".activities.AnimalDetailActivity"
+            android:windowSoftInputMode="adjustResize"/> <!-- Adicionado ou ajustado -->
+        <activity android:name=".activities.NotificacoesActivity"
+            android:windowSoftInputMode="adjustResize" />
 
+        <activity android:name=".activities.ChatActivity"
+            android:windowSoftInputMode="adjustResize" />
+
+        <activity android:name=".activities.MessagesActivity"
+            android:windowSoftInputMode="adjustResize" />
+
+        <activity android:name=".ui.ConversationListActivity" android:windowSoftInputMode="adjustResize"/>
 
     </application>
 

@@ -10,14 +10,13 @@ import android.widget.*;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.company.miadot.R;
 import com.company.miadot.adapters.ComentarioAdapter;
 import com.company.miadot.model.Comentarios;
+import com.company.miadot.model.Notificacao;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.*;
@@ -32,10 +31,14 @@ public class ComentariosBottomSheet extends BottomSheetDialogFragment {
     private Button buttonPublicar;
     private ComentarioAdapter adapter;
     private List<Comentarios> listaComentarios = new ArrayList<>();
+    private Set<String> comentarioIds = new HashSet<>();
     private String respondendoParaComentarioId = null;
 
     private int comentariosVisiveis = 10;
     private TextView verMaisComentarios;
+
+    private DatabaseReference comentariosRef;
+    private ChildEventListener comentariosListener;
 
     public static ComentariosBottomSheet novaInstancia(String animalId) {
         ComentariosBottomSheet fragment = new ComentariosBottomSheet();
@@ -78,69 +81,85 @@ public class ComentariosBottomSheet extends BottomSheetDialogFragment {
     }
 
     private void carregarComentarios() {
-        DatabaseReference comentariosRef = FirebaseDatabase.getInstance()
+        comentariosRef = FirebaseDatabase.getInstance()
                 .getReference("animais")
                 .child(animalId)
                 .child("comentarios");
 
-        comentariosRef.orderByChild("timestamp").limitToLast(comentariosVisiveis)
-                .addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        List<Comentarios> lista = new ArrayList<>();
-                        for (DataSnapshot snap : snapshot.getChildren()) {
-                            Comentarios c = snap.getValue(Comentarios.class);
-                            if (c != null) lista.add(c);
+        if (comentariosListener != null) {
+            comentariosRef.removeEventListener(comentariosListener);
+        }
+
+        listaComentarios.clear();
+        comentarioIds.clear();
+        adapter.notifyDataSetChanged();
+
+        comentariosListener = new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot snapshot, String previousChildName) {
+                Comentarios comentario = snapshot.getValue(Comentarios.class);
+                if (comentario != null && comentarioIds.add(comentario.getId())) {
+                    listaComentarios.add(0, comentario); // Mais recente no topo
+                    adapter.notifyItemInserted(0);
+                    recyclerComentarios.scrollToPosition(0);
+                }
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot snapshot, String previousChildName) {
+                Comentarios atualizado = snapshot.getValue(Comentarios.class);
+                if (atualizado != null) {
+                    for (int i = 0; i < listaComentarios.size(); i++) {
+                        if (listaComentarios.get(i).getId().equals(atualizado.getId())) {
+                            listaComentarios.set(i, atualizado);
+                            adapter.notifyItemChanged(i);
+                            break;
                         }
-
-                        // Ordem: mais recentes primeiro
-                        Collections.reverse(lista);
-                        listaComentarios.clear();
-                        listaComentarios.addAll(lista);
-                        adapter.notifyDataSetChanged();
-
-                        // Contar total de comentários
-                        comentariosRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                List<Comentarios> lista = new ArrayList<>();
-                                long total = snapshot.getChildrenCount();
-
-                                for (DataSnapshot snap : snapshot.getChildren()) {
-                                    Comentarios c = snap.getValue(Comentarios.class);
-                                    if (c != null) lista.add(c);
-                                }
-
-                                Collections.reverse(lista);
-                                listaComentarios.clear();
-                                listaComentarios.addAll(lista.subList(0, Math.min(lista.size(), comentariosVisiveis)));
-                                adapter.notifyDataSetChanged();
-
-                                if (total > comentariosVisiveis) {
-                                    verMaisComentarios.setVisibility(View.VISIBLE);
-                                    verMaisComentarios.setText("Ver mais comentários (" + total + ")");
-                                    verMaisComentarios.setOnClickListener(v -> {
-                                        comentariosVisiveis += 10;
-                                        carregarComentarios(); // recarrega com mais 10
-                                    });
-                                } else {
-                                    verMaisComentarios.setVisibility(View.GONE);
-                                }
-                            }
-
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError error) {
-                                Log.e("Firebase", "Erro ao carregar comentários", error.toException());
-                            }
-                        });
-
                     }
+                }
+            }
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-                        Log.e("Firebase", "Erro ao carregar comentários", error.toException());
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+                Comentarios removido = snapshot.getValue(Comentarios.class);
+                if (removido != null) {
+                    for (int i = 0; i < listaComentarios.size(); i++) {
+                        if (listaComentarios.get(i).getId().equals(removido.getId())) {
+                            listaComentarios.remove(i);
+                            comentarioIds.remove(removido.getId());
+                            adapter.notifyItemRemoved(i);
+                            break;
+                        }
                     }
-                });
+                }
+            }
+
+            @Override public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {}
+            @Override public void onCancelled(@NonNull DatabaseError error) {}
+        };
+
+        comentariosRef.orderByChild("timestamp").limitToLast(comentariosVisiveis)
+                .addChildEventListener(comentariosListener);
+
+        verMaisComentarios.setText(getString(R.string.ver_mais_comentarios));
+        verMaisComentarios.setVisibility(View.VISIBLE);
+        verMaisComentarios.setOnClickListener(v -> {
+            comentariosVisiveis += 10;
+            carregarComentarios(); // recarrega com mais 10 visíveis
+        });
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+
+        if (comentariosRef != null && comentariosListener != null) {
+            comentariosRef.removeEventListener(comentariosListener);
+        }
+
+        if (adapter != null) {
+            adapter.removerListeners();
+        }
     }
 
     private void publicarComentario() {
@@ -160,36 +179,81 @@ public class ComentariosBottomSheet extends BottomSheetDialogFragment {
                 String foto = snapshot.child("photoUrl").getValue(String.class);
 
                 Comentarios novoComentario = new Comentarios();
-                novoComentario.setId(UUID.randomUUID().toString());
+                String comentarioId = UUID.randomUUID().toString();
+                novoComentario.setId(comentarioId);
                 novoComentario.setNome(nome != null ? nome : "Usuário");
                 novoComentario.setTexto(texto);
                 novoComentario.setTimestamp(System.currentTimeMillis());
                 novoComentario.setFotoUrl(foto != null ? foto : "");
                 novoComentario.setUserId(userId);
 
+                DatabaseReference comentariosRef;
                 if (respondendoParaComentarioId != null) {
-                    FirebaseDatabase.getInstance()
+                    // É uma resposta
+                    comentariosRef = FirebaseDatabase.getInstance()
                             .getReference("respostas")
                             .child(respondendoParaComentarioId)
-                            .child(novoComentario.getId())
-                            .setValue(novoComentario);
+                            .child(comentarioId);
                 } else {
-                    FirebaseDatabase.getInstance()
+                    // É um comentário novo
+                    comentariosRef = FirebaseDatabase.getInstance()
                             .getReference("animais")
                             .child(animalId)
                             .child("comentarios")
-                            .child(novoComentario.getId())
-                            .setValue(novoComentario);
+                            .child(comentarioId);
                 }
 
-                editComentario.setText("");
-                editComentario.setHint("Adicione um comentário...");
-                respondendoParaComentarioId = null;
-                carregarComentarios();
+                comentariosRef.setValue(novoComentario).addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        editComentario.setText("");
+                        editComentario.setHint("Adicione um comentário...");
+                        respondendoParaComentarioId = null;
+
+                        // Buscar o dono do animal para enviar notificação
+                        DatabaseReference animalRef = FirebaseDatabase.getInstance()
+                                .getReference("animais")
+                                .child(animalId);
+
+                        animalRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot animalSnapshot) {
+                                String donoId = animalSnapshot.child("donoId").getValue(String.class);
+
+                                if (donoId != null && !donoId.equals(userId)) {
+                                    // Criar notificação para o dono
+                                    String notificacaoId = UUID.randomUUID().toString();
+                                    long timestamp = System.currentTimeMillis();
+                                    Notificacao notificacao = new Notificacao(
+                                            notificacaoId, // id
+                                            "comentario", // tipo
+                                            nome + " comentou no seu post", // mensagem
+                                            userId, // remetenteId
+                                            donoId, // destinatarioId
+                                            null, // postId
+                                            null, // petId
+                                            null, // imagemUrl
+                                            timestamp, // timestamp
+                                            false // lida
+                                    );
+
+                                    FirebaseDatabase.getInstance()
+                                            .getReference("notificacoes")
+                                            .child(donoId)
+                                            .child(notificacaoId)
+                                            .setValue(notificacao);
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {}
+                        });
+                    }
+                });
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {}
         });
     }
+
 }

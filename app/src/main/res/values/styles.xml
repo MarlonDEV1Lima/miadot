@@ -1,13 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Seu tema principal aqui, provavelmente já existe -->
+    <!-- Instagram-inspired App Theme -->
     <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <!-- outras configurações -->
+        <item name="colorPrimary">@color/instagram_black</item>
+        <item name="colorPrimaryVariant">@color/instagram_gray_dark</item>
+        <item name="colorSecondary">@color/instagram_blue</item>
+        <item name="colorSecondaryVariant">@color/instagram_blue</item>
+        <item name="colorSurface">@color/instagram_white</item>
+        <item name="android:colorBackground">@color/instagram_white</item>
+        <item name="colorError">@color/instagram_red</item>
+        <item name="colorOnPrimary">@color/instagram_white</item>
+        <item name="colorOnSecondary">@color/instagram_white</item>
+        <item name="colorOnSurface">@color/instagram_gray_text</item>
+        <item name="colorOnBackground">@color/instagram_gray_text</item>
+        <item name="colorOnError">@color/instagram_white</item>
+        <item name="android:statusBarColor">@color/instagram_white</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:navigationBarColor">@color/instagram_white</item>
+        <item name="android:windowLightNavigationBar">true</item>
     </style>
 
-    <!-- Estilo para o título da Toolbar -->
-    <style name="Toolbar.TitleText" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
-        <item name="android:textColor">#000000</item> <!-- Preto -->
-        <item name="android:textSize">20sp</item>
-         <!-- Fonte fina -->
+    <!-- Instagram-style Toolbar -->
+    <style name="InstagramToolbar" parent="Widget.MaterialComponents.Toolbar">
+        <item name="android:background">@color/instagram_white</item>
+        <item name="android:elevation">0dp</item>
+        <item name="titleTextColor">@color/instagram_gray_text</item>
+        <item name="android:theme">@style/ThemeOverlay.AppCompat.Light</item>
     </style>
+
+    <!-- Instagram-style Toolbar Title -->
+    <style name="Toolbar.TitleText" parent="TextAppearance.MaterialComponents.Headline6">
+        <item name="android:textColor">@color/instagram_gray_text</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:letterSpacing">0</item>
+    </style>
+
+    <!-- Instagram-style Button Primary -->
+    <style name="InstagramButtonPrimary" parent="Widget.MaterialComponents.Button">
+        <item name="android:background">@drawable/button_primary_instagram</item>
+        <item name="android:textColor">@color/instagram_white</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:letterSpacing">0</item>
+        <item name="cornerRadius">4dp</item>
+        <item name="android:elevation">0dp</item>
+        <item name="android:stateListAnimator">@null</item>
+    </style>
+
+    <!-- Instagram-style Button Secondary -->
+    <style name="InstagramButtonSecondary" parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="android:background">@drawable/button_secondary_instagram</item>
+        <item name="android:textColor">@color/instagram_gray_text</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:letterSpacing">0</item>
+        <item name="cornerRadius">4dp</item>
+        <item name="strokeColor">@color/instagram_gray_medium</item>
+        <item name="strokeWidth">1dp</item>
+        <item name="android:elevation">0dp</item>
+        <item name="android:stateListAnimator">@null</item>
+    </style>
+
+    <!-- Instagram-style EditText -->
+    <style name="InstagramEditText" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="android:background">@drawable/edittext_instagram</item>
+        <item name="android:textColor">@color/instagram_gray_text</item>
+        <item name="android:textColorHint">@color/instagram_gray_dark</item>
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="boxStrokeColor">@color/instagram_gray_medium</item>
+        <item name="boxStrokeWidth">1dp</item>
+        <item name="android:elevation">0dp</item>
+    </style>
+
+    <!-- Instagram-style Card -->
+    <style name="InstagramCard" parent="Widget.MaterialComponents.CardView">
+        <item name="cardBackgroundColor">@color/instagram_white</item>
+        <item name="cardElevation">0dp</item>
+        <item name="cardCornerRadius">0dp</item>
+        <item name="strokeColor">@color/instagram_gray_medium</item>
+        <item name="strokeWidth">0.5dp</item>
+    </style>
+
+    <!-- Instagram-style Text Primary -->
+    <style name="InstagramTextPrimary" parent="TextAppearance.MaterialComponents.Body1">
+        <item name="android:textColor">@color/instagram_gray_text</item>
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:letterSpacing">0</item>
+    </style>
+
+    <!-- Instagram-style Text Secondary -->
+    <style name="InstagramTextSecondary" parent="TextAppearance.MaterialComponents.Body2">
+        <item name="android:textColor">@color/instagram_gray_dark</item>
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:letterSpacing">0</item>
+    </style>
+
+    <!-- Instagram-style Username Text -->
+    <style name="InstagramUsernameText" parent="TextAppearance.MaterialComponents.Body2">
+        <item name="android:textColor">@color/instagram_gray_text</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:letterSpacing">0</item>
+    </style>
+
+    <!-- ESTILO PARA O DIALOGFRAGMENT DE DETALHES DO ANIMAL (POP-UP FLUTUANTE) -->
+    <!-- Este estilo faz com que a DialogFragment apareça como um pop-up menor, flutuando sobre a Activity de fundo. -->
+    <style name="FloatingAnimalDetailDialogStyle" parent="Theme.MaterialComponents.Light.Dialog">
+        <!-- Define a cor de fundo do próprio diálogo (ex: branco sólido) -->
+        <item name="android:windowBackground">@color/instagram_white</item>
+        <!-- Remove a barra de título padrão do diálogo -->
+        <item name="android:windowNoTitle">true</item>
+        <!-- ESSENCIAL: Torna o diálogo flutuante sobre a Activity de fundo -->
+        <item name="android:windowIsFloating">true</item>
+        <!-- ESSENCIAL: Garante que o diálogo não ocupe a tela inteira -->
+        <item name="android:windowFullscreen">false</item>
+        <!-- Remove qualquer sobreposição de conteúdo (sombras, etc.) -->
+        <item name="android:windowContentOverlay">@null</item>
+        <!-- Permite que o fundo do diálogo seja ligeiramente transparente, se o windowBackground permitir -->
+        <item name="android:windowIsTranslucent">true</item>
+        <!-- Habilita o escurecimento do fundo da Activity por trás do diálogo -->
+        <item name="android:backgroundDimEnabled">true</item>
+        <!-- Define a quantidade de escurecimento do fundo (0.0 a 1.0) -->
+        <item name="android:backgroundDimAmount">0.6</item>
+        <!-- Permite fechar o diálogo ao tocar fora dele -->
+        <item name="android:windowCloseOnTouchOutside">true</item>
+        <!-- Garante que o teclado se ajuste e não cubra o conteúdo do diálogo -->
+        <item name="android:windowSoftInputMode">adjustResize</item>
+    </style>
+
+    <!-- Instagram-style FAB -->
+    <style name="InstagramFAB" parent="Widget.MaterialComponents.FloatingActionButton">
+        <item name="backgroundTint">@color/instagram_black</item>
+        <item name="tint">@color/instagram_white</item>
+        <item name="elevation">8dp</item>
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+    </style>
+
 </resources>

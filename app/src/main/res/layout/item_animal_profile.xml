@@ -1,12 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="120dp"
-    android:layout_margin="1dp">
+    android:layout_height="wrap_content"
+    android:layout_margin="0.5dp">
 
+    <!-- Instagram-style grid item -->
     <ImageView
         android:id="@+id/imageAnimalProfile"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scaleType="centerCrop" />
-</FrameLayout>
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:scaleType="centerCrop"
+        android:background="@color/instagram_gray_light"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintDimensionRatio="1:1"
+        android:contentDescription="Foto do animal"
+        tools:src="@drawable/placeholder_pet" />
+
+    <!-- Overlay for additional info (optional) -->
+    <View
+        android:id="@+id/overlay"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="#80000000"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="@id/imageAnimalProfile"
+        app:layout_constraintBottom_toBottomOf="@id/imageAnimalProfile"
+        app:layout_constraintStart_toStartOf="@id/imageAnimalProfile"
+        app:layout_constraintEnd_toEndOf="@id/imageAnimalProfile" />
+
+    <!-- Likes indicator (Instagram style) -->
+    <LinearLayout
+        android:id="@+id/likesIndicator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:background="#80000000"
+        android:padding="4dp"
+        android:layout_margin="8dp"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="@id/imageAnimalProfile"
+        app:layout_constraintEnd_toEndOf="@id/imageAnimalProfile">
+
+        <ImageView
+            android:layout_width="12dp"
+            android:layout_height="12dp"
+            android:src="@drawable/ic_heart_filled"
+            android:layout_marginEnd="4dp" />
+
+        <TextView
+            android:id="@+id/textViewLikes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0"
+            android:textColor="@color/instagram_white"
+            android:textSize="12sp"
+            android:fontFamily="sans-serif-medium"
+            tools:text="42" />
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

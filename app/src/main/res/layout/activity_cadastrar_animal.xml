@@ -1,32 +1,192 @@
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent">
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/instagram_white">
 
-    <LinearLayout android:orientation="vertical" android:padding="16dp"
-        android:layout_width="match_parent" android:layout_height="wrap_content">
+    <!-- Instagram-style Toolbar -->
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="0dp"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/instagram_white"
+        android:elevation="0dp"
+        app:navigationIcon="@drawable/ic_arrow_back_24"
+        app:navigationContentDescription="Voltar"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
-        <ImageView android:id="@+id/imageAnimal"
-            android:layout_width="match_parent" android:layout_height="200dp"
-            android:scaleType="centerCrop" android:background="#CCC"
-            android:contentDescription="Imagem do animal" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Novo Pet"
+            android:textColor="@color/instagram_gray_text"
+            android:textSize="18sp"
+            android:fontFamily="sans-serif-medium"
+            android:layout_gravity="center" />
 
-        <Button android:id="@+id/btnSelecionarImagem"
-            android:text="Selecionar Foto"
-            android:layout_width="match_parent" android:layout_height="wrap_content" />
+    </androidx.appcompat.widget.Toolbar>
 
-        <EditText android:id="@+id/etNome" android:hint="Nome do animal"
-            android:layout_width="match_parent" android:layout_height="wrap_content" />
+    <!-- Divider line -->
+    <View
+        android:id="@+id/divider"
+        android:layout_width="0dp"
+        android:layout_height="0.5dp"
+        android:background="@color/instagram_gray_medium"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
-        <EditText android:id="@+id/etIdade" android:hint="Idade"
-            android:layout_width="match_parent" android:layout_height="wrap_content" />
+    <ScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@id/divider"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
-        <EditText android:id="@+id/etEstado" android:hint="Estado"
-            android:layout_width="match_parent" android:layout_height="wrap_content" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
 
-        <EditText android:id="@+id/etDescricao" android:hint="Descrição"
-            android:layout_width="match_parent" android:layout_height="wrap_content"
-            android:minLines="3" android:gravity="top" />
+            <!-- Image Upload Section -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="250dp"
+                android:layout_marginBottom="16dp"
+                style="@style/InstagramCard">
 
-        <Button android:id="@+id/btnCadastrar" android:text="Cadastrar"
-            android:layout_width="match_parent" android:layout_height="wrap_content" />
-    </LinearLayout>
-</ScrollView>
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:id="@+id/imageAnimal"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="centerCrop"
+                        android:background="@color/instagram_gray_light"
+                        android:contentDescription="Imagem do animal" />
+
+                    <LinearLayout
+                        android:id="@+id/uploadPlaceholder"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:background="@color/instagram_gray_light">
+
+                        <ImageView
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:src="@drawable/ic_add_outline"
+                            android:layout_marginBottom="8dp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Adicionar foto"
+                            android:textColor="@color/instagram_gray_dark"
+                            android:textSize="16sp"
+                            android:fontFamily="sans-serif" />
+
+                    </LinearLayout>
+
+                </FrameLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <Button
+                android:id="@+id/btnSelecionarImagem"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:text="Selecionar Foto"
+                android:layout_marginBottom="24dp"
+                style="@style/InstagramButtonSecondary" />
+
+            <!-- Form Fields -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                style="@style/InstagramEditText">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etNome"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Nome do animal"
+                    android:textColor="@color/instagram_gray_text"
+                    android:textColorHint="@color/instagram_gray_dark" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                style="@style/InstagramEditText">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etIdade"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Idade"
+                    android:textColor="@color/instagram_gray_text"
+                    android:textColorHint="@color/instagram_gray_dark"
+                    android:inputType="text" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                style="@style/InstagramEditText">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etEstado"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Estado"
+                    android:textColor="@color/instagram_gray_text"
+                    android:textColorHint="@color/instagram_gray_dark" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="24dp"
+                style="@style/InstagramEditText">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etDescricao"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Descrição"
+                    android:textColor="@color/instagram_gray_text"
+                    android:textColorHint="@color/instagram_gray_dark"
+                    android:minLines="3"
+                    android:gravity="top"
+                    android:inputType="textMultiLine" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <Button
+                android:id="@+id/btnCadastrar"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:text="Cadastrar Pet"
+                android:layout_marginBottom="16dp"
+                style="@style/InstagramButtonPrimary" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

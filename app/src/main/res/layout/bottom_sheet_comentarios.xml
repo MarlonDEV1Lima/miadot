@@ -1,11 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@android:color/white"
-    android:orientation="vertical"
-    android:padding="12dp">
+    android:orientation="vertical">
 
+    <!-- Linha Separadora Superior (opcional, para visual mais clean) -->
+    <View
+        android:layout_width="40dp"
+        android:layout_height="4dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/handle_indicador"
+        android:alpha="0.7" />
+
+    <!-- Título da Bottom Sheet -->
     <TextView
         android:id="@+id/tituloComentarios"
         android:layout_width="match_parent"
@@ -13,26 +23,56 @@
         android:text="Comentários"
         android:textStyle="bold"
         android:textSize="18sp"
-        android:paddingBottom="8dp" />
+        android:textColor="@color/text_primary"
+        android:paddingTop="12dp"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:paddingBottom="12dp"
+        android:gravity="center_horizontal" />
 
+    <!-- Divisor abaixo do título (opcional, mas comum em bottom sheets) -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#E0E0E0" /> <!-- Linha fina e suave -->
+
+    <!-- RecyclerView para a lista de comentários -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerComentariosBottom"
         android:layout_width="match_parent"
         android:layout_height="300dp"
-        android:overScrollMode="always"
-        android:scrollbars="vertical" />
+    android:overScrollMode="always"
+    android:scrollbars="vertical"
+    android:paddingTop="8dp"
+    android:paddingBottom="8dp"
+    android:clipToPadding="false"
+    tools:listitem="@layout/item_comentario" /> <!-- Referência ao seu layout de item de comentário -->
 
+    <!-- "Ver mais comentários" Link -->
     <TextView
         android:id="@+id/verMaisComentarios"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingStart="12dp"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
         android:paddingTop="4dp"
+        android:paddingBottom="8dp"
         android:text="Ver mais comentários"
-        android:textColor="@color/link_color"
-        android:textStyle="bold"
-        android:visibility="gone" />
+        android:textColor="@color/brand_blue"
+    android:textStyle="bold"
+    android:visibility="gone"
+    android:clickable="true"
+    android:focusable="true"
+    android:background="?attr/selectableItemBackground" />
 
+    <!-- Divisor acima do campo de texto (opcional, para separar a seção de input) -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#E0E0E0"
+        android:layout_marginTop="4dp" />
+
+    <!-- Campo para adicionar novo comentário -->
     <EditText
         android:id="@+id/editNovoComentario"
         android:layout_width="match_parent"
@@ -42,14 +82,27 @@
         android:maxLength="200"
         android:maxLines="3"
         android:layout_marginTop="12dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
         android:background="@drawable/edittext_background"
-        android:padding="8dp" />
+        android:padding="10dp"
+        android:textSize="14sp"
+        android:textColor="@color/text_primary"
+        android:textColorHint="@color/text_secondary" />
 
+    <!-- Botão Publicar Comentário -->
     <Button
         android:id="@+id/buttonPublicarComentario"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Publicar"
         android:layout_gravity="end"
-        android:layout_marginTop="4dp" />
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="12dp"
+        android:layout_marginEnd="16dp"
+        android:textColor="@color/brand_blue"
+        android:textSize="14sp"
+        android:background="?attr/selectableItemBackground"
+        style="@style/Widget.AppCompat.Button.Borderless" />
+
 </LinearLayout>

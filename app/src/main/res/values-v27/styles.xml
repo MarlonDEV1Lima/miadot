@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/instagram_black</item>
+        <item name="colorPrimaryVariant">@color/instagram_gray_dark</item>
+        <item name="colorSecondary">@color/instagram_blue</item>
+        <item name="colorSecondaryVariant">@color/instagram_blue</item>
+        <item name="colorSurface">@color/instagram_white</item>
+        <item name="android:colorBackground">@color/instagram_white</item>
+        <item name="colorError">@color/instagram_red</item>
+        <item name="colorOnPrimary">@color/instagram_white</item>
+        <item name="colorOnSecondary">@color/instagram_white</item>
+        <item name="colorOnSurface">@color/instagram_gray_text</item>
+        <item name="colorOnBackground">@color/instagram_gray_text</item>
+        <item name="colorOnError">@color/instagram_white</item>
+        <item name="android:statusBarColor">@color/instagram_white</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:navigationBarColor">@color/instagram_white</item>
+        <item name="android:windowLightNavigationBar">true</item>
+    </style>
+</resources>
